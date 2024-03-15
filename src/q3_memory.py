@@ -11,12 +11,11 @@ import pandas as pd
 import json
 
 from memory_profiler import profile
-#import cProfile
-#import pstats
+#import cProfile,pstats
 import re
 
 @profile
-def q3_memory(file_path: str) -> List[Tuple[datetime.date, str]]:
+def q3_memory(file_path: str) -> List[Tuple[str, int]]:
     with open(file_path, 'r') as f:
         data = [[json.loads(line)['content']]  for line in f.readlines()]
     columnas = ['content']
@@ -49,27 +48,12 @@ def q3_memory(file_path: str) -> List[Tuple[datetime.date, str]]:
 if __name__ == '__main__':
     profiler=cProfile.Profile()
     profiler.enable()
-    li_q3m = q3_memory('c:/Users/Usuario/Downloads/challenge_DE/src/farmers-protest-tweets-2021-2-4.json')
+    li_q3m = q3_memory('c:/Users/Usuario/Downloads/farmers-protest-tweets-2021-2-4.json')
     profiler.disable()
 
     stats = pstats.Stats(profiler)
-    stats.strip_dirs()
-    stats.sort_stats('cumtime')
     print('----------------------------')
     stats.print_stats(0)
     print('----------------------------')
-
-    #(m+) se aprecia que el consumo de memoria tiene como maximo 544MiB en una sola instruccion,
-    #luego bajando a 150MiB para la mayoria. el tiempo subio a aproximados ~9.8 seconds
-    #[('narendramodi', 2261),
-    # ('Kisanektamorcha', 1836),
-    # ('RakeshTikaitBKU', 1641),
-    # ('PMOIndia', 1422),
-    # ('RahulGandhi', 1125),
-    # ('GretaThunberg', 1046),
-    # ('RaviSinghKA', 1015), 
-    # ('rihanna', 972),
-    # ('UNHumanRights', 962),
-    # ('meenaharris', 925)]
     print(li_q3m)
 '''

@@ -10,8 +10,7 @@ from datetime import datetime
 import pandas as pd
 
 from memory_profiler import profile
-#import cProfile
-#import pstats
+#import cProfile,pstats
 
 @profile
 def q1_time(file_path: str) -> List[Tuple[datetime.date, str]]:
@@ -46,27 +45,12 @@ def q1_time(file_path: str) -> List[Tuple[datetime.date, str]]:
 if __name__ == '__main__':
     profiler=cProfile.Profile()
     profiler.enable()
-    li_q1t = q1_time('c:/Users/Usuario/Downloads/challenge_DE/src/farmers-protest-tweets-2021-2-4.json')
+    li_q1t = q1_time('c:/Users/Usuario/Downloads/farmers-protest-tweets-2021-2-4.json')
     profiler.disable()
 
     stats = pstats.Stats(profiler)
-    stats.strip_dirs()
-    stats.sort_stats('cumtime')
     print('----------------------------')
     stats.print_stats(0)
     print('----------------------------')
-
-    #SINLINEA: (t+) se aprecia que el consumo de memoria en cada instruccion es de ~1510MiB para
-    #casi todas las instrucciones del primer y segundo bloque, el tiempo es de  aproximados 9.547 seconds
-    #[(datetime.date(2021, 2, 12), 'RanbirS00614606'),
-    # (datetime.date(2021, 2, 13), 'MaanDee08215437'),
-    # (datetime.date(2021, 2, 17), 'RaaJVinderkaur'),
-    # (datetime.date(2021, 2, 16), 'jot__b'),
-    # (datetime.date(2021, 2, 14), 'rebelpacifist'),
-    # (datetime.date(2021, 2, 18), 'neetuanjle_nitu'),
-    # (datetime.date(2021, 2, 15), 'jot__b'),
-    # (datetime.date(2021, 2, 20), 'MangalJ23056160'),
-    # (datetime.date(2021, 2, 23), 'Surrypuria'),
-    # (datetime.date(2021, 2, 19), 'Preetm91')]
     print(li_q1t)
 '''

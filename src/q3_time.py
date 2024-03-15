@@ -10,12 +10,11 @@ from datetime import datetime
 import pandas as pd
 
 from memory_profiler import profile
-#import cProfile
-#import pstats
+#import cProfile,pstats
 import re
 
 @profile
-def q3_time(file_path: str) -> List[Tuple[datetime.date, str]]:
+def q3_time(file_path: str) -> List[Tuple[str, int]]:
     pd.set_option('mode.chained_assignment', None)  #evita warning
     #cargo el jsonl como dataframe pandas
     pddf=pd.read_json(file_path, lines=True)
@@ -49,27 +48,12 @@ def q3_time(file_path: str) -> List[Tuple[datetime.date, str]]:
 if __name__ == '__main__':
     profiler=cProfile.Profile()
     profiler.enable()
-    li_q3t = q3_time('c:/Users/Usuario/Downloads/challenge_DE/src/farmers-protest-tweets-2021-2-4.json')
+    li_q3t = q3_time('c:/Users/Usuario/Downloads/farmers-protest-tweets-2021-2-4.json')
     profiler.disable()
 
     stats = pstats.Stats(profiler)
-    stats.strip_dirs()
-    stats.sort_stats('cumtime')
     print('----------------------------')
     stats.print_stats(0)
     print('----------------------------')
-
-    #(t+) se aprecia que el consumo de memoria en al menos 8 instrucciones es de ~1425MiB luego bajando a ~260MiB, 
-    #el tiempo es de aproximados 8.7 seconds
-    #[('narendramodi', 2261),
-    # ('Kisanektamorcha', 1836),
-    # ('RakeshTikaitBKU', 1641),
-    # ('PMOIndia', 1422),
-    # ('RahulGandhi', 1125),
-    # ('GretaThunberg', 1046),
-    # ('RaviSinghKA', 1015), 
-    # ('rihanna', 972),
-    # ('UNHumanRights', 962),
-    # ('meenaharris', 925)]
     print(li_q3t)
 '''

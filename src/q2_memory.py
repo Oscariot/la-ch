@@ -10,13 +10,12 @@ from datetime import datetime
 import pandas as pd
 
 from memory_profiler import profile
-#import cProfile
-#import pstats
+#import cProfile,pstats
 import re
 import json
 
 @profile
-def q2_memory(file_path: str) -> List[Tuple[datetime.date, str]]:
+def q2_memory(file_path: str) -> List[Tuple[str, int]]:
     with open(file_path, 'r') as f:
         data = [[json.loads(line)['content']]  for line in f.readlines()]
     columnas = ['content']
@@ -47,27 +46,12 @@ def q2_memory(file_path: str) -> List[Tuple[datetime.date, str]]:
 if __name__ == '__main__':
     profiler=cProfile.Profile()
     profiler.enable()
-    li_q2m = q2_memory('c:/Users/Usuario/Downloads/challenge_DE/src/farmers-protest-tweets-2021-2-4.json')
+    li_q2m = q2_memory('c:/Users/Usuario/Downloads/farmers-protest-tweets-2021-2-4.json')
     profiler.disable()
 
     stats = pstats.Stats(profiler)
-    stats.strip_dirs()
-    stats.sort_stats('cumtime')
     print('----------------------------')
     stats.print_stats(0)
     print('----------------------------')
-
-    #(m+) se aprecia que el consumo de memoria en cada instruccion es tiene como maximo 544 en 
-    #una sola instruccion, luego bajando a 150MiB para la mayoria. el tiempo subio a aproximados ~10 seconds
-    #[('🙏', 7286), 
-    # ('😂', 3072),
-    # ('️', 3061),
-    # ('🚜', 2972),
-    # ('✊', 2411),
-    # ('🌾', 2363),
-    # ('🇮', 2096),
-    # ('� '', 2094),
-    # ('🏻', 2080), 
-    # ('❤', 1779)]
     print(li_q2m)
 '''
