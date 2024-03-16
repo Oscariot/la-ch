@@ -46,12 +46,12 @@ def q2_memory(file_path: str) -> List[Tuple[str, int]]:
 if __name__ == '__main__':
     profiler=cProfile.Profile()
     profiler.enable()
-    li_q2m = q2_memory('c:/Users/Usuario/Downloads/farmers-protest-tweets-2021-2-4.json')
+    list_q2m = q2_memory('c:/Users/Usuario/Downloads/farmers-protest-tweets-2021-2-4.json')
     profiler.disable()
 
     stats = pstats.Stats(profiler)
     print('----------------------------')
     stats.print_stats(0)
     print('----------------------------')
-    print(li_q2m)
+    print(list_q2m)
 '''

@@ -13,12 +13,13 @@ from memory_profiler import profile
 #import cProfile,pstats
 import re
 
+
 @profile
 def q3_time(file_path: str) -> List[Tuple[str, int]]:
     pd.set_option('mode.chained_assignment', None)  #evita warning
-    #cargo el jsonl como dataframe pandas
+    # cargo el jsonl como dataframe pandas
     pddf=pd.read_json(file_path, lines=True)
-    #trabajo solo con una columna, la que hace referencia al body del tweet
+    # trabajo solo con una columna, la que hace referencia al body del tweet
     pddf=pddf[['content']]     
     # selecciono solo las filas que tengan al menos un emoji
     pddf = pddf[pddf['content'].str.contains(r'(?:[@]([a-zA-Z0-9_]+|$))', regex=True)]
@@ -48,12 +49,12 @@ def q3_time(file_path: str) -> List[Tuple[str, int]]:
 if __name__ == '__main__':
     profiler=cProfile.Profile()
     profiler.enable()
-    li_q3t = q3_time('c:/Users/Usuario/Downloads/farmers-protest-tweets-2021-2-4.json')
+    list_q3t = q3_time('c:/Users/Usuario/Downloads/farmers-protest-tweets-2021-2-4.json')
     profiler.disable()
 
     stats = pstats.Stats(profiler)
     print('----------------------------')
     stats.print_stats(0)
     print('----------------------------')
-    print(li_q3t)
+    print(list_q3t)
 '''

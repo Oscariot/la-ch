@@ -8,15 +8,16 @@
 from typing import List, Tuple
 from datetime import datetime
 import pandas as pd
-import json
 
 from memory_profiler import profile
 #import cProfile,pstats
+import json
 
 @profile
 def q1_memory(file_path: str) -> List[Tuple[datetime.date, str]]:
     resp = []
-    pd.set_option('mode.chained_assignment', None)  # Levantar una excepción
+    # primer bloque: se obtienen las 10 fechas con mas tweets
+    pd.set_option('mode.chained_assignment', None)  
     with open(file_path, 'r') as f:
         data = [[json.loads(line)['url'], pd.to_datetime(json.loads(line)['date']), json.loads(line)['user']['username']]  for line in f.readlines()]
     columnas = ['url', 'date', 'identificador']
@@ -29,9 +30,9 @@ def q1_memory(file_path: str) -> List[Tuple[datetime.date, str]]:
     df_topdates=df_topdates.sort_values(by='url_count', ascending=False)
     df_topdates = df_topdates.head(10)
 
+    # segundo bloque: para cada una de las fechas top, se obtienen el usuario con mas tweets
     for indice, fila in df_topdates.iterrows():
         df_topuser_xdate = pddf[pddf['date_fecha'] == fila['date_fecha']]
-        #df_topuser_xdate['identificador'] = df_topuser_xdate['user'].apply(lambda x: x['username'])
         df_topuser_xdate = df_topuser_xdate.groupby('identificador').agg({'url': ['count']})
         df_topuser_xdate=df_topuser_xdate.reset_index()
         df_topuser_xdate.columns = ['identificador','url_count']
@@ -47,12 +48,12 @@ def q1_memory(file_path: str) -> List[Tuple[datetime.date, str]]:
 if __name__ == '__main__':
     profiler=cProfile.Profile()
     profiler.enable()
-    li_q1m = q1_memory('c:/Users/Usuario/Downloads/farmers-protest-tweets-2021-2-4.json')
+    list_q1m = q1_memory('c:/Users/Usuario/Downloads/farmers-protest-tweets-2021-2-4.json')
     profiler.disable()
 
     stats = pstats.Stats(profiler)
     print('----------------------------')
     stats.print_stats(0)
     print('----------------------------')
-    print(li_q1m)
+    print(list_q1m)
 '''

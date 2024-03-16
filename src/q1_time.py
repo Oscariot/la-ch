@@ -12,9 +12,11 @@ import pandas as pd
 from memory_profiler import profile
 #import cProfile,pstats
 
+
 @profile
 def q1_time(file_path: str) -> List[Tuple[datetime.date, str]]:
     resp = []
+    # primer bloque: se obtienen las 10 fechas con mas tweets
     pd.set_option('mode.chained_assignment', None)  # Levantar una excepción
     pddf=pd.read_json(file_path, lines=True)
     pddf=pddf[['date','url','user']] 
@@ -26,7 +28,7 @@ def q1_time(file_path: str) -> List[Tuple[datetime.date, str]]:
     df_topdates=df_topdates.sort_values(by='url_count', ascending=False)
     df_topdates = df_topdates.head(10)
 
-
+    # segundo bloque: para cada una de las fechas top, se obtienen el usuario con mas tweets
     for indice, fila in df_topdates.iterrows():
         df_topuser_xdate = pddf[pddf['date_fecha'] == fila['date_fecha']]
         df_topuser_xdate['identificador'] = df_topuser_xdate['user'].apply(lambda x: x['username'])
@@ -45,12 +47,12 @@ def q1_time(file_path: str) -> List[Tuple[datetime.date, str]]:
 if __name__ == '__main__':
     profiler=cProfile.Profile()
     profiler.enable()
-    li_q1t = q1_time('c:/Users/Usuario/Downloads/farmers-protest-tweets-2021-2-4.json')
+    list_q1t = q1_time('c:/Users/Usuario/Downloads/farmers-protest-tweets-2021-2-4.json')
     profiler.disable()
 
     stats = pstats.Stats(profiler)
     print('----------------------------')
     stats.print_stats(0)
     print('----------------------------')
-    print(li_q1t)
+    print(list_q1t)
 '''
