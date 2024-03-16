@@ -19,7 +19,9 @@ def q1_memory(file_path: str) -> List[Tuple[datetime.date, str]]:
     # primer bloque: se obtienen las 10 fechas con mas tweets
     pd.set_option('mode.chained_assignment', None)  
     with open(file_path, 'r') as f:
-        data = [[json.loads(line)['url'], pd.to_datetime(json.loads(line)['date']), json.loads(line)['user']['username']]  for line in f.readlines()]
+        data = [[json.loads(line)['url'], \
+                 pd.to_datetime(json.loads(line)['date']), \
+                 json.loads(line)['user']['username']]  for line in f.readlines()]
     columnas = ['url', 'date', 'identificador']
     pddf = pd.DataFrame(data, columns=columnas)
     pddf['date_fecha'] = pddf['date'].dt.date

@@ -21,14 +21,14 @@ def q3_time(file_path: str) -> List[Tuple[str, int]]:
     pddf=pd.read_json(file_path, lines=True)
     # trabajo solo con una columna, la que hace referencia al body del tweet
     pddf=pddf[['content']]     
-    # selecciono solo las filas que tengan al menos un emoji
-    pddf = pddf[pddf['content'].str.contains(r'(?:[@]([a-zA-Z0-9_]+|$))', regex=True)]
-    # elimino todo contenido que no sea un emoji
+    # selecciono solo filas que tengan al menos una mention
+    pddf  = pddf[pddf['content'].str.extract(r'(?:[@]([a-zA-Z0-9_]+|$))', expand=False).notnull()]
+    # elimino todo contenido que no sea una mension
     pddf['content'] = pddf['content'].apply(lambda x: ' '.join(re.findall(r'(?:[@]([a-zA-Z0-9_]+|$))', x)))
-    # separo las celdas que tengan mas de un emoji en filas
+    # separo las celdas que tengan mas de una mension en filas
     pddf = pddf.assign(content=pddf['content'].str.split(' ')).explode('content').reset_index(drop=True)
     # selecciono las filas que no sean vacias
-    pddf = pddf[pddf['content'] != ' ']
+    pddf = pddf[~pddf['content'].isin([' ',''])]
     
     # count de emojis
     df_topmention = pddf.groupby('content').agg({'content': ['count']})

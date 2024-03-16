@@ -22,12 +22,12 @@ def q3_memory(file_path: str) -> List[Tuple[str, int]]:
     pddf = pd.DataFrame(data, columns=columnas)
     # trabajo solo con una columna, la que hace referencia al body del tweet
     pddf=pddf[['content']]     
-    # elimino todo contenido que no sea un emoji
+    # elimino todo contenido que no sea una mension
     pddf['content'] = pddf['content'].apply(lambda x: ' '.join(re.findall(r'(?:[@]([a-zA-Z0-9_]+|$))', x)))
-    # separo las celdas que tengan mas de un emoji en filas
+    # separo las celdas que tengan mas de una mension en filas
     pddf = pddf.assign(content=pddf['content'].str.split(' ')).explode('content').reset_index(drop=True)
     # selecciono las filas que no sean vacias
-    pddf = pddf[pddf['content'] != ' ']
+    pddf = pddf[~pddf['content'].isin([' ',''])]
     
     # count de emojis
     df_topmention = pddf.groupby('content').agg({'content': ['count']})

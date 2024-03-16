@@ -28,7 +28,7 @@ def q2_time(file_path: str) -> List[Tuple[str, int]]:
     # separo las celdas que tengan mas de un emoji en filas
     pddf = pddf.assign(content=pddf['content'].str.split(' ')).explode('content').reset_index(drop=True)
     # selecciono las filas que no sean vacias
-    pddf = pddf[pddf['content'] != ' ']
+    pddf = pddf[~pddf['content'].isin([' ',''])]
     
     # count de emojis
     df_topemoji = pddf.groupby('content').agg({'content': ['count']})
