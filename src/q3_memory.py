@@ -10,20 +10,20 @@ from datetime import datetime
 import pandas as pd
 
 from memory_profiler import profile
-#import cProfile,pstats
-import re
-import json
+import cProfile,pstats
+from re import findall
+from json import loads
 
 @profile
 def q3_memory(file_path: str) -> List[Tuple[str, int]]:
     with open(file_path, 'r') as f:
-        data = [[json.loads(line)['content']]  for line in f.readlines()]
+        data = [[loads(line)['content']]  for line in f.readlines()]
     columnas = ['content']
     pddf = pd.DataFrame(data, columns=columnas)
     # trabajo solo con una columna, la que hace referencia al body del tweet
     pddf=pddf[['content']]     
     # elimino todo contenido que no sea una mension
-    pddf['content'] = pddf['content'].apply(lambda x: ' '.join(re.findall(r'(?:[@]([a-zA-Z0-9_]+|$))', x)))
+    pddf['content'] = pddf['content'].apply(lambda x: ' '.join(findall(r'(?:[@]([a-zA-Z0-9_]+|$))', x)))
     # separo las celdas que tengan mas de una mension en filas
     pddf = pddf.assign(content=pddf['content'].str.split(' ')).explode('content').reset_index(drop=True)
     # selecciono las filas que no sean vacias

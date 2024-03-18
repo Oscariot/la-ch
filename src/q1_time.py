@@ -10,7 +10,7 @@ from datetime import datetime
 import pandas as pd
 
 from memory_profiler import profile
-#import cProfile,pstats
+import cProfile,pstats
 
 
 @profile
@@ -53,6 +53,8 @@ if __name__ == '__main__':
     stats = pstats.Stats(profiler)
     print('----------------------------')
     stats.print_stats(0)
+    print('----------------------------')
+    profile.print_stats()
     print('----------------------------')
     print(list_q1t)
 '''

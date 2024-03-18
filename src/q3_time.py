@@ -10,8 +10,8 @@ from datetime import datetime
 import pandas as pd
 
 from memory_profiler import profile
-#import cProfile,pstats
-import re
+import cProfile,pstats
+from re import findall
 
 
 @profile
@@ -24,7 +24,7 @@ def q3_time(file_path: str) -> List[Tuple[str, int]]:
     # selecciono solo filas que tengan al menos una mention
     pddf  = pddf[pddf['content'].str.extract(r'(?:[@]([a-zA-Z0-9_]+|$))', expand=False).notnull()]
     # elimino todo contenido que no sea una mension
-    pddf['content'] = pddf['content'].apply(lambda x: ' '.join(re.findall(r'(?:[@]([a-zA-Z0-9_]+|$))', x)))
+    pddf['content'] = pddf['content'].apply(lambda x: ' '.join(findall(r'(?:[@]([a-zA-Z0-9_]+|$))', x)))
     # separo las celdas que tengan mas de una mension en filas
     pddf = pddf.assign(content=pddf['content'].str.split(' ')).explode('content').reset_index(drop=True)
     # selecciono las filas que no sean vacias
